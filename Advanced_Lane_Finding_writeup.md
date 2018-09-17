@@ -159,25 +159,25 @@ def color_mask(img, img_hls):
     return mask_binary
 ```
 
-[image1]: ./output_images/writeup_images/straight_lines1_red.png
-[image2]: ./output_images/writeup_images/straight_lines1_hls.png
-[image3]: ./output_images/writeup_images/straight_lines1_combined.png
-[image4]: ./output_images/writeup_images/straight_lines1_gradient.png
-[image5]: ./output_images/writeup_images/straight_lines1_roi.png
+[image4]: ./output_images/writeup_images/straight_lines1_red.png
+[image5]: ./output_images/writeup_images/straight_lines1_hls.png
+[image6]: ./output_images/writeup_images/straight_lines1_combined.png
+[image7]: ./output_images/writeup_images/straight_lines1_gradient.png
+[image8]: ./output_images/writeup_images/straight_lines1_roi.png
 #### Red Layer
 ***
 The values of the red layer are thresholded to select only the pixels with values above 200 and lightness value above 150, which will assign 1's to yellow and white values.
-![alt_text][image1]
+![alt_text][image4]
 
 #### HLS Layers
 ***
 I used the HLS color space to make my `color_select()` function more robust when conditions are not ideal (e.g. shadows, different road hue, brightness, etc.). The hue layer is does a good job of finding the base color independent of brightness which is helpful when shadows are present. I combined the lightness layer with the hue layer to find yellow and white values in dark areas. The saturation layer was used to verify the pixels detected in the low light areas are saturated with a high enough color value to be confident they are part of the lane line. 
-![alt_text][image2]
+![alt_text][image5]
 
 #### Combined Color Spaces
 ***
 The results of thresholding the HLS layers and the Red layer are combined using `cv2.bitwise_or()`. An example of the color selected image is displayed below:  
-![alt_text][image3]
+![alt_text][image6]
 
 #### Gradient (Sobel)
 ***
@@ -220,36 +220,36 @@ def sobel_mag_dir(abs_sobelx, abs_sobely, dir_thresh=(0.0, 0.3)):
     return binary_output
 ```
 
-![alt_text][image4]
+![alt_text][image7]
 
 #### Region of interest
 ***
 Finally, A region of interest is applied to the result of the color selected and gradient images to eliminate noise caused by the surrounding environment (e.g. grass, adjacent vehicles, etc.)
-![alt_text][image5]
+![alt_text][image8]
 ***
 
 ### 4. Have lane line pixels been identified in the rectified image and fit with a polynomial?
-[image1]: ./test_images/test1.jpg
-[image2]: ./output_images/writeup_images/test1_histogram.png
-[image3]: ./output_images/writeup_images/test1_window.png
+[image9]: ./test_images/test1.jpg
+[image10]: ./output_images/writeup_images/test1_histogram.png
+[image11]: ./output_images/writeup_images/test1_window.png
 
 I implemented the moving window to detect the lane line pixels and fit a polynomial to each line. The window method uses 9 rectangular windows with a window height equal to the image height divided by 9 and a defined width to search for lane pixels for each line. To illustrate this step I will use the example image below:
 
-![alt_text][image1]
+![alt_text][image9]
 
 #### Histogram
 ***
 The position of the first rectangle is found by using a histogram on the bottom half of the image to identify the x-value that contains the most white pixels for the left and right lane line. In the example histogram below, the x-values for each value would be Left: ~420  Right: ~940
-![alt_text][image2]
+![alt_text][image10]
 
 #### Window Search and Polynomial
 ***
 The first windows are centered at the bottom of the image on the x-values found in the historam search and searches for lane pixels. If the amount of pixels found in the rectangle is greater than `minpix`, the window is re-centered at the average x-value of the detected pixels coordinates. This continues until all windows have been searched. A polynomial is fitted to the detected lane line pixels using `np.polyfit()`. See the example result below:
-![alt_text][image3]
+![alt_text][image11]
 
 
 ### 5. Having identified the lane lines, has the radius of curvature of the road been estimated? And the position of the vehicle with respect to center in the lane?
-[image1]: ./output_images/writeup_images/test1_rad.png
+[image12]: ./output_images/writeup_images/test1_rad.png
 
 #### Radius of Curvature
 The radius of curvature estimation was identified by calculating the radius of each line individualy using the radius equation and then taking the average of two radii. To report this value in meters, I first assigned a metric value per pixel in each dimension. For the y-dimension, I used 30 meters as an estimate of the maximum distance from the vehicle that the perspective transform rectifies. For the x-dimension, I divide the standard lane width of 3.7 meters by the difference between the x-intercepts of each lane line polynomial.
@@ -287,7 +287,7 @@ def vehicle_offset(img, left, right):
     return vehicle_offset*xm_per_pix
 ```
 An example of a processed image with the radius and vehicle position is shown below:
-![alt_text][image1]
+![alt_text][image12]
 ***
 
 ## Pipeline (video)
