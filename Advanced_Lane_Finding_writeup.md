@@ -332,7 +332,7 @@ I used some sanity checks to find the best fit for the lane line. After the lane
 
 These checks will ensure that line fitted by the detected line pixels is similar to the previous lane line. I provide a +/-50 pixel window for the x-intercept and +/-60 pixels for the top x-value. I give an extra +/-10 pixels for the top because this is area where the camera will first see any curves, which can make cause the end of the lane line shift more quickly between frames compared to the x-intercept at the bottom of the image.  
 
-The following snippet of code are the sanity inside `fit_polinomial`
+The following snippet of code are the sanity checks inside `fit_polinomial`
 ```python
 # Sanity checks for x-intercepts and x values 
 if ((len(left.current_fit) > 1) & (len(right.current_fit) > 1)):
@@ -435,7 +435,7 @@ NOTE: Before the pipeline is used, a Line() instance must be created for each la
    * HLS also improves the ability to detect lane lines with varying pavement color and when shadows are present.
 5. Gradients are used to find where difference in intensity values from one pixel to the next is significant.
    * This allows me to find the edges of the lane line because the contrast between the lane line and the pavement color is generally significant.
-   * I used the gradient magnitude direction as a mask to filter pixels that might not be be part of the line. The direction will find pixels that are not ~mostly~ vertical. This will result in dark (filled with '0') areas where the lane lines should be which will be and-ed with the combined image of color_select and the gradient of x-dimension.
+   * I used the gradient magnitude direction as a mask to filter pixels that might not be be part of the line. The direction will find pixels that are not mostly vertical. This will result in dark (filled with '0') areas where the lane lines should be which will be and-ed with the combined image of color_select and the gradient of x-dimension.
 6. Find lane pixels
    * If no previous lines detected, use window search
    * If previous lines detected, search around previous polynomial
