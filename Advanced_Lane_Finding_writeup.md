@@ -14,7 +14,7 @@
     Calibrate a 2D camera using chessboard calibration images to a aquire a conversion matrix and distortion coefficients.   
 
 ## Primary Goal
-    Write a sofetware pipeline to identiify the lane boundaries from raw images from a video.
+    Write a software pipeline to identify the lane boundaries from raw images imported a video.
 
 ### Steps:
 * Apply a distortion correction to raw images.
